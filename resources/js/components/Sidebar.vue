@@ -15,7 +15,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="#" v-on:click="llamar(1)">
           <font-awesome-icon icon="tv" />
           <span>Panel</span></a>
       </li>
@@ -51,9 +51,9 @@
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Custom Utilities:</h6>
-            <a class="collapse-item" href="utilities-color.html">Colors</a>
-            <a class="collapse-item" href="utilities-border.html">Borders</a>
+            <h6 class="collapse-header">Lista de Reportes:</h6>
+            <a class="collapse-item" href="#" v-on:click="llamar(2)">Ventas</a>
+            <a class="collapse-item" href="#" v-on:click="llamar(3)">Borders</a>
             <a class="collapse-item" href="utilities-animation.html">Animations</a>
             <a class="collapse-item" href="utilities-other.html">Other</a>
           </div>
@@ -113,5 +113,30 @@
     </ul>
     <!-- End of Sidebar -->
 </template>
-<script></script>
-<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<script>
+  export default {
+      data(){
+        return {
+          menu : 0
+        }
+      }, 
+      methods: {
+            nuevaCategoria(){
+                const params = {
+                    description: this.title
+                };
+                axios.post('/categorias', params).then((response) => {
+                    const categoria = response.data;
+                     this.$emit('new', categoria);
+                });
+                
+            },
+            llamar(opcion){
+              this.$emit('menu', opcion);
+            }
+      },
+        mounted() {
+            console.log('Component mounted.')
+        }
+    }
+</script>

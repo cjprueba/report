@@ -1,16 +1,28 @@
 
 <template>
 	<div id="wrapper">
-		<sidebar></sidebar>
-		<dashboard></dashboard>
+		<sidebar @menu="cambiarMenu"></sidebar>
+		<dashboard v-if="menu === 1"></dashboard>
+    <marca v-if="menu === 2"></marca>
 	</div>
 </template>
 
-<script >
-
-	(function($) {
+<script>
+	export default {
+        data(){
+            return {
+               menu: 1
+            }
+        }, 
+        methods: {
+            cambiarMenu(menu){
+                this.menu = menu;
+            }
+        },
+        mounted() {
+            (function($) {
   "use strict"; // Start of use strict
-
+     
   // Toggle the side navigation
   $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
     $("body").toggleClass("sidebar-toggled");
@@ -56,7 +68,11 @@
     e.preventDefault();
   });
 
-})(jQuery); // End of use strict
+})(jQuery);
+        }
+    }
+	 // End of use strict
+
 
 </script>
 <style>
@@ -12122,3 +12138,4 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 </style>
+

@@ -5,16 +5,20 @@
  */
 
 /* ------------------------------------------------------------------------------- */
+/*window.$ = require('jquery')
+window.JQuery = require('jquery')*/
 
-require('./bootstrap');
-const $ = require('jquery')
 
 /* ********************************************* */
 
 /* VUE */ 
 
-window.$ = $
+
 window.Vue = require('vue');
+require('./bootstrap');
+require('bootstrap-datepicker');
+// // not sure if you need this at all
+
 
 /* ********************************************* */
 
@@ -27,10 +31,10 @@ import VueApexCharts from 'vue-apexcharts'
 /* FONT AWESOME */ 
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPlus, faAmbulance, faCog, faChartArea, faTv, faStickyNote, faBell, faEnvelope, faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faAmbulance, faCog, faChartArea, faTv, faStickyNote, faBell, faEnvelope, faSearch, faDownload } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faPlus, faAmbulance, faCog, faChartArea, faTv, faStickyNote, faBell, faEnvelope, faSearch)
+library.add(faPlus, faAmbulance, faCog, faChartArea, faTv, faStickyNote, faBell, faEnvelope, faSearch, faDownload)
 
 /* ********************************************* */
 
@@ -52,6 +56,28 @@ Vue.component('apexchart', VueApexCharts)
 
 Vue.component('bar', require('./components/charts/Bar.vue').default);
 Vue.component('donut', require('./components/charts/Donut.vue').default);
+
+/* ********************************************* */
+
+// CHART JS
+
+Vue.component('barChart', require('./components/charts/Barchart.vue').default);
+
+/* ********************************************* */
+
+// MARCA
+
+Vue.component('marca', require('./components/marca/Inicio.vue').default);
+Vue.component('venta-marca-categoria', require('./components/marca/busquedas/VentaMarcaCategoria.vue').default);
+
+/* ********************************************* */
+
+// CAJAS
+
+Vue.component('primeraCaja', require('./components/cajas/PrimeraCaja.vue').default);
+Vue.component('segundaCaja', require('./components/cajas/SegundaCaja.vue').default);
+Vue.component('terceraCaja', require('./components/cajas/TerceraCaja.vue').default);
+Vue.component('cuartaCaja', require('./components/cajas/CuartaCaja.vue').default);
 
 /* ********************************************* */
 
