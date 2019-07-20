@@ -91,9 +91,43 @@
 					</div>
 	    	</div>
 	     	
+	     	<div class="col-xl-6 col-lg-6 mt-3">
+	     		<table class="table table-striped table-light table-sm" v-if="responseMarca.length > 0">
+				  <thead>
+				    <tr>
+				      <th scope="col">#</th>
+				      <th scope="col">Marca</th>
+				      <th scope="col">Vendido</th>
+				      <th scope="col">Stock Vendidos</th>
+				      <th scope="col">Stock General</th>
+				      <th scope="col">Totales</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr v-for="(marca, index) in responseMarca">
+				      <th scope="row">{{index+1}}</th>
+				      <td>{{marca.MARCA}}</td>
+				      <td>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(marca.VENDIDO)}}</td>
+				      <td>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(marca.STOCK)}}</td>
+				      <td>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(marca.STOCK_G)}}</td>
+				      <td>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(marca.TOTAL)}}</td>
+				    </tr>
+				  </tbody>
+				  <tfoot>
+					<tr>
+					  <th></th>
+					  <th>TOTALES</th>
+					  <th>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(responseMarca.reduce((acc, item) => acc + item.VENDIDO, 0))}}</th>
+					  <th>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(responseMarca.reduce((acc, item) => acc + item.STOCK, 0))}}</th>
+					   <th>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(responseMarca.reduce((acc, item) => acc + item.STOCK_G, 0))}}</th>
+					  <th>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(responseMarca.reduce((acc, item) => acc + item.TOTAL, 0))}}</th>
+					</tr>
+				  </tfoot>
+				</table>
+	     	</div>
 	     	<!-- CARD PARA MARCA Y SU CATEGORIA -->
 
-			<div class="card border-left-primary mt-3 col-md-12" v-for="marca in responseMarca">
+			<!-- <div class="card border-left-primary mt-3 col-md-12" v-for="marca in responseMarca">
 				<div class="row">
 					
 					<div class="col-md-6">
@@ -120,6 +154,59 @@
 				    	</div>
 					</li>
 				</ul>
+			</div> -->
+
+			<div class="col-md-12">
+				<div class="card border-left-primary mt-3" v-for="marca in responseMarca">
+					<div class="row">
+						
+						<div class="col-md-6">
+							  <div class="card-header font-weight-bold text-primary">
+							    {{marca.MARCA}}
+							  </div>
+					    </div>
+					    <div class="col-md-6">
+							  <div class="card-header font-weight-bold text-primary text-right">
+							    {{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(marca.TOTAL)}}
+							  </div>
+					    </div>
+					</div>  
+					
+					<div class="card-body">
+						<table class="table table-sm">
+						  <thead class="thead-light">
+						    <tr>
+						      <th scope="col">#</th>
+						      <th scope="col">Categoria</th>
+						      <th scope="col">Vendido</th>
+						      <th scope="col">Stock Vendido</th>
+						      <th scope="col">Stock General</th>
+						      <th scope="col">Total</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						    <tr v-for="(categoria, index) in filterItems(responseCategoria, marca.CODIGO)">
+						      <th scope="row">{{index+1}}</th>
+						      <td>{{categoria.LINEA}}</td>
+						      <td>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(categoria.VENDIDO)}}</td>
+						      <td>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(categoria.STOCK)}}</td>
+						      <td>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(categoria.STOCK_G)}}</td>
+						      <td>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(categoria.TOTAL)}}</td>
+						    </tr>
+						  </tbody>
+						  <tfoot>
+							<tr>
+							  <th></th>
+							  <th>TOTALES</th>
+							  <th>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(marca.VENDIDO)}}</th>
+							  <th>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(marca.STOCK)}}</th>
+							  <th>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(marca.STOCK_G)}}</th>
+							  <th>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(marca.TOTAL)}}</th>
+							</tr>
+						  </tfoot>
+						</table>
+					</div>
+				</div>
 			</div>
 
 		</div>
@@ -199,8 +286,7 @@
 	        	}
 	        },
 	        generarConsulta(){
-	        	this.selectedInicialFecha = $('#selectedInicialFecha').val();
-	        	this.selectedFinalFecha = $('#selectedFinalFecha').val();
+	        	
 	        	
 	        	if (this.selectedSucursal === null || this.selectedSucursal === "null") {
 	        		this.validarSucursal = true;
@@ -316,11 +402,18 @@
 			}
         },
         mounted() {
+        	let me = this;
         	$(function(){
 		   		    $('#sandbox-container .input-daterange').datepicker({
 		   		    	    keyboardNavigation: false,
     						forceParse: false
     				});
+    				$("#selectedInicialFecha").datepicker().on(
+			     		"changeDate", () => {me.selectedInicialFecha = $('#selectedInicialFecha').val()}
+					);
+					$("#selectedFinalFecha").datepicker().on(
+			     		"changeDate", () => {me.selectedFinalFecha = $('#selectedFinalFecha').val()}
+					);
 			});
 			this.llamarBusquedas();
         }

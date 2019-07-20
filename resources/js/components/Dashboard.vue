@@ -17,27 +17,15 @@
           </div>
 
           <!-- Content Row -->
-          <div class="row">
-
+          <div>
             <!-- Earnings (Monthly) Card Example -->
-            	<primeraCaja></primeraCaja>
-            <!-- Earnings (Monthly) Card Example -->
-            	<segundaCaja></segundaCaja>
-            <!-- Earnings (Monthly) Card Example -->
-            	<terceraCaja></terceraCaja>
-            <!-- Pending Requests Card Example -->
-            	<cuartaCaja></cuartaCaja>
+            	<cajas></cajas>
           </div>
 
           <!-- Content Row -->
-
-          <div >
-
+          <div>
             <!-- Area Chart -->
-            
-                  <barChart></barChart>
-                
-           
+              <barChart></barChart>
           </div>
 
           <!-- Content Row -->
@@ -169,7 +157,7 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2019</span>
+            <span>Copyright &copy; Retail 2019</span>
           </div>
         </div>
       </footer>

@@ -30,6 +30,7 @@
         "@fortawesome/vue-fontawesome": "^0.1.6",
         "apexcharts": "^3.8.1",
         "bootstrap-datepicker": "^1.9.0",
+        "bootstrap-vue": "^2.0.0-rc.26",
         "vue-apexcharts": "^1.4.0"
     }
 }

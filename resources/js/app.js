@@ -17,6 +17,9 @@ window.JQuery = require('jquery')*/
 window.Vue = require('vue');
 require('./bootstrap');
 require('bootstrap-datepicker');
+
+import { VBPopover } from 'bootstrap-vue';
+Vue.directive('b-popover', VBPopover);
 // // not sure if you need this at all
 
 
@@ -31,10 +34,10 @@ import VueApexCharts from 'vue-apexcharts'
 /* FONT AWESOME */ 
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPlus, faAmbulance, faCog, faChartArea, faTv, faStickyNote, faBell, faEnvelope, faSearch, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faAmbulance, faCog, faChartArea, faTv, faStickyNote, faBell, faEnvelope, faSearch, faDownload, faCaretUp, faCaretDown, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faPlus, faAmbulance, faCog, faChartArea, faTv, faStickyNote, faBell, faEnvelope, faSearch, faDownload)
+library.add(faPlus, faAmbulance, faCog, faChartArea, faTv, faStickyNote, faBell, faEnvelope, faSearch, faDownload, faCaretUp, faCaretDown, faInfoCircle)
 
 /* ********************************************* */
 
@@ -74,10 +77,7 @@ Vue.component('venta-marca-categoria', require('./components/marca/busquedas/Ven
 
 // CAJAS
 
-Vue.component('primeraCaja', require('./components/cajas/PrimeraCaja.vue').default);
-Vue.component('segundaCaja', require('./components/cajas/SegundaCaja.vue').default);
-Vue.component('terceraCaja', require('./components/cajas/TerceraCaja.vue').default);
-Vue.component('cuartaCaja', require('./components/cajas/CuartaCaja.vue').default);
+Vue.component('cajas', require('./components/cajas/Cajas.vue').default);
 
 /* ********************************************* */
 
