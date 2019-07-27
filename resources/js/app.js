@@ -75,6 +75,20 @@ Vue.component('venta-marca-categoria', require('./components/marca/busquedas/Ven
 
 /* ********************************************* */
 
+// TRANSFERENCIA
+
+Vue.component('transferencia', require('./components/transferencia/Inicio.vue').default);
+Vue.component('transferencia-marca-categoria', require('./components/transferencia/busquedas/TransferenciaMarcaCategoria.vue').default);
+
+/* ********************************************* */
+
+// TABLAS
+
+Vue.component('table-marcas', require('./components/tables/tableMarca.vue').default);
+Vue.component('table-categorias', require('./components/tables/tableCategoria.vue').default);
+
+/* ********************************************* */
+
 // CAJAS
 
 Vue.component('cajas', require('./components/cajas/Cajas.vue').default);

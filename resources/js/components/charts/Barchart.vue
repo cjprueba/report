@@ -21,7 +21,7 @@
 	                <!-- Card Body -->
 	                <div class="card-body">
 	                	
-	                	<div v-if="varMesIngreso.length <= 0" class="d-flex justify-content-center" >
+	                	<div v-if="varMesIngreso.length <= 0" class="d-flex justify-content-center col-auto" >
 	                        <div class="spinner-grow " role="status" >
 	                            <span class="sr-only">Loading...</span>
 	                        </div>
@@ -40,7 +40,7 @@
 	              <div class="card shadow mb-4">
 	                <!-- Card Header - Dropdown -->
 	                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-	                  <h6 class="m-0 font-weight-bold text-primary">Este mes</h6>
+	                  <h6 class="m-0 font-weight-bold text-primary">Este mes <small>- Monto</small></h6>
 	                  <div class="dropdown no-arrow">
 	                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
@@ -57,7 +57,7 @@
 	                <!-- Card Body -->
 	                <div class="card-body">
 
-	                	<div v-if="varMesMarca.length <= 0" class="d-flex justify-content-center flex-wrap" >
+	                	<div v-if="varMesMarca.length <= 0" class="d-flex justify-content-center col-auto" >
 	                        <div class="spinner-grow " role="status" >
 	                            <span class="sr-only">Loading...</span>
 	                        </div>
@@ -78,7 +78,7 @@
 	              <div class="card shadow mb-4">
 	                <!-- Card Header - Dropdown -->
 	                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-	                  <h6 class="m-0 font-weight-bold text-primary">Este mes</h6>
+	                  <h6 class="m-0 font-weight-bold text-primary">Este mes <small>- Monto</small></h6>
 	                  <div class="dropdown no-arrow">
 	                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
@@ -95,7 +95,7 @@
 	                <!-- Card Body -->
 	                <div class="card-body">
 
-	                	<div v-if="varMesMarca.length <= 0" class="d-flex justify-content-center flex-wrap" >
+	                	<div v-if="varMesMarca.length <= 0" class="d-flex justify-content-center  col-auto" >
 	                        <div class="spinner-grow " role="status" >
 	                            <span class="sr-only">Loading...</span>
 	                        </div>
@@ -110,42 +110,44 @@
 	        	 </div>
 	    </div>
 
-	     <!-- Pie Chart -->
-            <div class="col-xl-4 col-lg-4">
-              <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                  <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                      <div class="dropdown-header">Dropdown Header:</div>
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                  </div>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                  <donut></donut>
-                  <div class="mt-4 text-center small">
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-primary"></i> Direct
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-success"></i> Social
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-info"></i> Referral
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+	     <!-- POR CANTIDAD MARCA -->
+
+	    <div class="col-xl-6 col-lg-6">
+	              <div class="card shadow mb-4">
+	                <!-- Card Header - Dropdown -->
+	                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+	                  <h6 class="m-0 font-weight-bold text-primary">Este mes <small>- Cantidad Vendida</small></h6>
+	                  <div class="dropdown no-arrow">
+	                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+	                    </a>
+	                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+	                      <div class="dropdown-header">Dropdown Header:</div>
+	                      <a class="dropdown-item" href="#">Action</a>
+	                      <a class="dropdown-item" href="#">Another action</a>
+	                      <div class="dropdown-divider"></div>
+	                      <a class="dropdown-item" href="#">Something else here</a>
+	                    </div>
+	                  </div>
+	                </div>
+	                <!-- Card Body -->
+	                <div class="card-body">
+
+	                	<div v-if="varMesMarca.length <= 0" class="d-flex justify-content-center  col-auto" >
+	                        <div class="spinner-grow " role="status" >
+	                            <span class="sr-only">Loading...</span>
+	                        </div>
+                      	</div>
+
+						<div class="ct-chart">
+							<canvas id="marcasCantidad">
+								
+							</canvas>
+						</div>
+					</div>
+	        	 </div>
+	    </div>
+
     </div>
 </template>
 <script >
@@ -158,6 +160,7 @@
 				categorias: [],
 				varTotalMarca: [],
 				varVendidoMarca: [],
+				varMesMarcaVendido: [],
 				varMesMarca: [],
 				varTotalCategoria: [],
 				varMesCategoria: [],
@@ -185,6 +188,7 @@
 					me.loadVentas();
 					me.loadMarcas();
 					me.loadCategorias();
+					me.loadMarcasCantidad();
 				})
 				.catch(function (error) {
 					console.log(error);
@@ -381,7 +385,6 @@
 				me.marcas.map(function(x){
 					me.varMesMarca.push(x.MARCA);
 					me.varTotalMarca.push(x.TOTAL);
-					me.varVendidoMarca.push(x.VENDIDO);
 				});
 
 				me.varMarca = document.getElementById('marcas').getContext('2d');
@@ -465,8 +468,53 @@
 				        }
 				    }
 				});
+			},
+			loadMarcasCantidad(){
+				let me = this;
+				me.marcas.map(function(x){
+					me.varMesMarcaVendido.push(x.MARCA);
+					me.varVendidoMarca.push(x.VENDIDO);
+				});
+
+				me.varMarca = document.getElementById('marcasCantidad').getContext('2d');
+
+				 me.charMarca = new Chart(me.varMarca, {
+				    type: 'bar',
+				    data: {
+				        labels: me.varMesMarca,
+				        datasets: [{
+				            label: 'Marcas',
+				            data: me.varVendidoMarca,
+				            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+				            borderColor: 'rgba(75, 192, 192, 1)',
+				            borderWidth: 1
+				        }]
+				    },
+				    options: {
+				    	tooltips: {
+				              callbacks: {
+				                  label: function(tooltipItem, data) {
+				                      var value = data.datasets[0].data[tooltipItem.index];
+				                      
+				                      return 'Gs. ' + new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(value) + '';
+				                  }
+				              }
+				          },
+				        scales: {
+				            yAxes: [{
+				                ticks: {
+				                    beginAtZero: false,
+				                    callback: function(value, index, values) {
+							          return value.toLocaleString();
+							        }
+				                }
+				            }]
+				        }
+				    }
+				});
 			}
 		},
+
 		mounted(){
 			this.getIngresos();
 		}

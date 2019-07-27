@@ -54,9 +54,17 @@ class VentaController extends Controller
 
     public function mostrar(Request $request)
     {
+        if ($request["Opcion"] === 2) {
+            $ventas = Venta::generarTablaMarca($request->all());
+            return response()->json($ventas);
+        } else if  ($request["Opcion"] === 3) {
+            $ventas = Venta::generarTablaCategoria($request->all());
+            return response()->json($ventas);
+        } else {
+            $ventas = Venta::generarConsulta($request->all());
+            return response()->json($ventas);
+        }
         //return response()->json([$request->all()]);
-        $ventas = Venta::generarConsulta($request->all());
-        return response()->json($ventas);
     }
 
     /**

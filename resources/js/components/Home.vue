@@ -4,6 +4,7 @@
 		<sidebar @menu="cambiarMenu"></sidebar>
 		<dashboard v-if="menu === 1"></dashboard>
     <marca v-if="menu === 2"></marca>
+    <transferencia v-if="menu === 3"></transferencia>
 	</div>
 </template>
 
@@ -24,7 +25,7 @@
   "use strict"; // Start of use strict
      
   // Toggle the side navigation
-  $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
+  $("#sidebarToggle, .navbar-toggler-icon").on('click', function(e) {
     $("body").toggleClass("sidebar-toggled");
     $(".sidebar").toggleClass("toggled");
     if ($(".sidebar").hasClass("toggled")) {
@@ -8771,7 +8772,7 @@ button.bg-dark:focus {
 
 .pb-4,
 .py-4 {
-  padding-bottom: 1.5rem !important;
+  padding-bottom: 0rem !important;
 }
 
 .pl-4,

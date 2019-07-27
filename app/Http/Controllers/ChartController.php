@@ -56,7 +56,7 @@ class ChartController extends Controller
         DB::raw('v.COD_PROD'),
         DB::raw('PRODUCTOS.MARCA AS MARCA'),
         DB::raw('PRODUCTOS.LINEA AS LINEA'))  
-        ->whereMonth('v.FECALTAS', 6)
+        ->whereMonth('v.FECALTAS', $mes)
         ->where([
             ['v.ID_SUCURSAL', '=', $sucursal],
             ['v.ANULADO', '<>', 1],
@@ -77,7 +77,7 @@ class ChartController extends Controller
         DB::raw('v.CAJA'),
         DB::raw('v.ID_SUCURSAL'),
         DB::raw('v.ITEM'))  
-       ->whereMonth('v.FECALTAS', 6)
+       ->whereMonth('v.FECALTAS', $mes)
         ->where([
             ['v.ID_SUCURSAL', '=', $sucursal],
             ['v.ANULADO', '<>', 1],

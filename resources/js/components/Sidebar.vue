@@ -4,10 +4,10 @@
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-laugh-wink"></i>
+        <div class="sidebar-brand-icon">
+          <font-awesome-icon icon="chart-area" />
         </div>
-        <div class="sidebar-brand-text mx-3">RPT  <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">RETAIL</div>
       </a>
 
       <!-- Divider -->
@@ -25,12 +25,12 @@
 
       <!-- Heading -->
       <div class="sidebar-heading">
-        Interface
+        Interfaz
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" hidden>
           <font-awesome-icon icon="cog" />
           <span>Components</span>
         </a>
@@ -53,23 +53,21 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Lista de Reportes:</h6>
             <a class="collapse-item" href="#" v-on:click="llamar(2)">Ventas</a>
-            <a class="collapse-item" href="#" v-on:click="llamar(3)">Borders</a>
-            <a class="collapse-item" href="utilities-animation.html">Animations</a>
-            <a class="collapse-item" href="utilities-other.html">Other</a>
+            <a class="collapse-item" href="#" v-on:click="llamar(3)">Transferencias</a>
           </div>
         </div>
       </li>
 
       <!-- Divider -->
-      <hr class="sidebar-divider">
+      <!-- <hr class="sidebar-divider"> -->
 
       <!-- Heading -->
-      <div class="sidebar-heading">
+     <!--  <div class="sidebar-heading">
         Addons
-      </div>
+      </div> -->
 
       <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
           <i class="fas fa-fw fa-folder"></i>
           <span>Pages</span>
@@ -86,21 +84,21 @@
             <a class="collapse-item" href="blank.html">Blank Page</a>
           </div>
         </div>
-      </li>
+      </li> -->
 
       <!-- Nav Item - Charts -->
-      <li class="nav-item">
+     <!--  <li class="nav-item">
         <a class="nav-link" href="charts.html">
           <font-awesome-icon icon="chart-area" />
           <span>Graficos</span></a>
-      </li>
+      </li> -->
 
       <!-- Nav Item - Tables -->
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link" href="tables.html">
           <i class="fas fa-fw fa-table"></i>
           <span>Tables</span></a>
-      </li>
+      </li> -->
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">

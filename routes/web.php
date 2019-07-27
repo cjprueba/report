@@ -26,3 +26,4 @@ Route::apiResource('ventas', 'VentaController');
 Route::apiResource('charts', 'ChartController');
 Route::apiResource('busquedas', 'BusquedaController');
 Route::post('ventas', 'VentaController@mostrar');
+Route::post('transferencias', 'TransferenciaControler@mostrar');

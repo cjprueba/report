@@ -301,36 +301,115 @@ class Venta extends Model
 
         // CARGAR MARCAS 0 EN VENTAS
 
-        array_unshift($datos['Marcas'], 0);
+        //array_unshift($datos['Marcas'], 0);
         //var_dump($datos['Marcas']);
         /*  --------------------------------------------------------------------------------- */
 
         /*  *********** TODAS LAS VENTAS ENTRE LAS FECHAS INTERVALOS *********** */
 
-        $ventasdet = DB::connection('retail')->table('ventasdet as v')
-        ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
-        ->leftjoin('MARCA', 'MARCA.CODIGO', '=', 'PRODUCTOS.MARCA')
-        ->leftjoin('LINEAS', 'LINEAS.CODIGO', '=', 'PRODUCTOS.LINEA')
-        ->select(DB::raw('SUM(v.PRECIO) AS PRECIO'),
-        DB::raw('SUM(v.CANTIDAD) AS VENDIDO'),
-        DB::raw('PRODUCTOS.DESCRIPCION AS DESCRIPCION'),
-        DB::raw('IFNULL((SELECT SUM(l.CANTIDAD) FROM lotes as l WHERE ((l.COD_PROD = v.COD_PROD) AND (l.ID_SUCURSAL = v.ID_SUCURSAL)) Group By v.COD_PROD),0) AS STOCK'),
-        DB::raw('MARCA.DESCRIPCION AS MARCA_NOMBRE'),
-        DB::raw('LINEAS.DESCRIPCION AS LINEA_NOMBRE'),
-        DB::raw('v.COD_PROD'),
-        DB::raw('PRODUCTOS.MARCA AS MARCA'),
-        DB::raw('PRODUCTOS.LINEA AS LINEA'))  
-        ->whereBetween('v.FECALTAS', [$inicio , $final])
-        ->whereIn('PRODUCTOS.MARCA', $datos['Marcas'])
-        ->whereIn('PRODUCTOS.LINEA', $datos['Categorias'])
-        ->where([
-            ['v.ID_SUCURSAL', '=', $sucursal],
-            ['v.ANULADO', '<>', 1],
-            ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
-        ])
-        ->groupBy('v.COD_PROD')
-        ->get()
-        ->toArray(); 
+        if ($datos['AllCategory'] AND $datos['AllBrand']) {
+            $ventasdet = DB::connection('retail')->table('ventasdet as v')
+            ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+            ->leftjoin('MARCA', 'MARCA.CODIGO', '=', 'PRODUCTOS.MARCA')
+            ->leftjoin('LINEAS', 'LINEAS.CODIGO', '=', 'PRODUCTOS.LINEA')
+            ->select(DB::raw('SUM(v.PRECIO) AS PRECIO'),
+            DB::raw('SUM(v.CANTIDAD) AS VENDIDO'),
+            DB::raw('PRODUCTOS.DESCRIPCION AS DESCRIPCION'),
+            DB::raw('IFNULL((SELECT SUM(l.CANTIDAD) FROM lotes as l WHERE ((l.COD_PROD = v.COD_PROD) AND (l.ID_SUCURSAL = v.ID_SUCURSAL))),0) AS STOCK'),
+            DB::raw('MARCA.DESCRIPCION AS MARCA_NOMBRE'),
+            DB::raw('LINEAS.DESCRIPCION AS LINEA_NOMBRE'),
+            DB::raw('v.COD_PROD'),
+            DB::raw('PRODUCTOS.MARCA AS MARCA'),
+            DB::raw('PRODUCTOS.LINEA AS LINEA'))  
+            ->whereBetween('v.FECALTAS', [$inicio , $final])
+            ->where([
+                ['v.ID_SUCURSAL', '=', $sucursal],
+                ['v.ANULADO', '<>', 1],
+                ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+            ])
+            ->groupBy('v.COD_PROD')
+            ->get()
+            ->toArray(); 
+
+            
+        } else if ($datos['AllCategory']) {
+            
+            $ventasdet = DB::connection('retail')->table('ventasdet as v')
+            ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+            ->leftjoin('MARCA', 'MARCA.CODIGO', '=', 'PRODUCTOS.MARCA')
+            ->leftjoin('LINEAS', 'LINEAS.CODIGO', '=', 'PRODUCTOS.LINEA')
+            ->select(DB::raw('SUM(v.PRECIO) AS PRECIO'),
+            DB::raw('SUM(v.CANTIDAD) AS VENDIDO'),
+            DB::raw('PRODUCTOS.DESCRIPCION AS DESCRIPCION'),
+            DB::raw('IFNULL((SELECT SUM(l.CANTIDAD) FROM lotes as l WHERE ((l.COD_PROD = v.COD_PROD) AND (l.ID_SUCURSAL = v.ID_SUCURSAL)) Group By v.COD_PROD),0) AS STOCK'),
+            DB::raw('MARCA.DESCRIPCION AS MARCA_NOMBRE'),
+            DB::raw('LINEAS.DESCRIPCION AS LINEA_NOMBRE'),
+            DB::raw('v.COD_PROD'),
+            DB::raw('PRODUCTOS.MARCA AS MARCA'),
+            DB::raw('PRODUCTOS.LINEA AS LINEA'))  
+            ->whereBetween('v.FECALTAS', [$inicio , $final])
+            ->whereIn('PRODUCTOS.MARCA', $datos['Marcas'])
+            ->where([
+                ['v.ID_SUCURSAL', '=', $sucursal],
+                ['v.ANULADO', '<>', 1],
+                ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+            ])
+            ->groupBy('v.COD_PROD')
+            ->get()
+            ->toArray(); 
+
+        } else if ($datos['AllBrand']) {
+             
+            $ventasdet = DB::connection('retail')->table('ventasdet as v')
+            ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+            ->leftjoin('MARCA', 'MARCA.CODIGO', '=', 'PRODUCTOS.MARCA')
+            ->leftjoin('LINEAS', 'LINEAS.CODIGO', '=', 'PRODUCTOS.LINEA')
+            ->select(DB::raw('SUM(v.PRECIO) AS PRECIO'),
+            DB::raw('SUM(v.CANTIDAD) AS VENDIDO'),
+            DB::raw('PRODUCTOS.DESCRIPCION AS DESCRIPCION'),
+            DB::raw('IFNULL((SELECT SUM(l.CANTIDAD) FROM lotes as l WHERE ((l.COD_PROD = v.COD_PROD) AND (l.ID_SUCURSAL = v.ID_SUCURSAL)) Group By v.COD_PROD),0) AS STOCK'),
+            DB::raw('MARCA.DESCRIPCION AS MARCA_NOMBRE'),
+            DB::raw('LINEAS.DESCRIPCION AS LINEA_NOMBRE'),
+            DB::raw('v.COD_PROD'),
+            DB::raw('PRODUCTOS.MARCA AS MARCA'),
+            DB::raw('PRODUCTOS.LINEA AS LINEA'))  
+            ->whereBetween('v.FECALTAS', [$inicio , $final])
+            ->whereIn('PRODUCTOS.LINEA', $datos['Categorias'])
+            ->where([
+                ['v.ID_SUCURSAL', '=', $sucursal],
+                ['v.ANULADO', '<>', 1],
+                ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+            ])
+            ->groupBy('v.COD_PROD')
+            ->get()
+            ->toArray(); 
+        } else  {
+
+            $ventasdet = DB::connection('retail')->table('ventasdet as v')
+            ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+            ->leftjoin('MARCA', 'MARCA.CODIGO', '=', 'PRODUCTOS.MARCA')
+            ->leftjoin('LINEAS', 'LINEAS.CODIGO', '=', 'PRODUCTOS.LINEA')
+            ->select(DB::raw('SUM(v.PRECIO) AS PRECIO'),
+            DB::raw('SUM(v.CANTIDAD) AS VENDIDO'),
+            DB::raw('PRODUCTOS.DESCRIPCION AS DESCRIPCION'),
+            DB::raw('IFNULL((SELECT SUM(l.CANTIDAD) FROM lotes as l WHERE ((l.COD_PROD = v.COD_PROD) AND (l.ID_SUCURSAL = v.ID_SUCURSAL)) Group By v.COD_PROD),0) AS STOCK'),
+            DB::raw('MARCA.DESCRIPCION AS MARCA_NOMBRE'),
+            DB::raw('LINEAS.DESCRIPCION AS LINEA_NOMBRE'),
+            DB::raw('v.COD_PROD'),
+            DB::raw('PRODUCTOS.MARCA AS MARCA'),
+            DB::raw('PRODUCTOS.LINEA AS LINEA'))  
+            ->whereBetween('v.FECALTAS', [$inicio , $final])
+            ->whereIn('PRODUCTOS.MARCA', $datos['Marcas'])
+            ->whereIn('PRODUCTOS.LINEA', $datos['Categorias'])
+            ->where([
+                ['v.ID_SUCURSAL', '=', $sucursal],
+                ['v.ANULADO', '<>', 1],
+                ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+            ])
+            ->groupBy('v.COD_PROD')
+            ->get()
+            ->toArray(); 
+        }
 
         /*  --------------------------------------------------------------------------------- */
 
@@ -352,6 +431,7 @@ class Venta extends Model
         ])
         ->get(); 
 
+       
         /*  --------------------------------------------------------------------------------- */
 
         foreach ($descuentos as $descuento) {
@@ -360,22 +440,76 @@ class Venta extends Model
 
             /*  *********** RECORRER LAS VENTAS CON LOS DESCUENTOS GENERALES *********** */
 
-            $ventas_con_descuentos = DB::connection('retail')->table('ventasdet as v')
-            ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
-            ->select(DB::raw('v.COD_PROD'),
-            DB::raw('v.PRECIO'),
-            DB::raw('v.PRECIO_UNIT'),
-            DB::raw('v.ITEM'))  
-            ->whereBetween('v.FECALTAS', [$inicio , $final])
-            ->whereIn('PRODUCTOS.MARCA', $datos['Marcas'])
-            ->whereIn('PRODUCTOS.LINEA', $datos['Categorias'])
-            ->where([
-                ['v.ID_SUCURSAL', '=', $descuento->ID_SUCURSAL],
-                ['v.CODIGO', '=', $descuento->CODIGO],
-                ['v.CAJA', '=', $descuento->CAJA],
-                ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
-            ])
-            ->get();
+            if ($datos['AllCategory'] AND $datos['AllBrand']) {
+                $ventas_con_descuentos = DB::connection('retail')->table('ventasdet as v')
+                ->select(DB::raw('v.COD_PROD'),
+                DB::raw('v.PRECIO'),
+                DB::raw('v.PRECIO_UNIT'),
+                DB::raw('v.ITEM'))
+                ->where([
+                    ['v.ID_SUCURSAL', '=', $descuento->ID_SUCURSAL],
+                    ['v.CODIGO', '=', $descuento->CODIGO],
+                    ['v.CAJA', '=', $descuento->CAJA],
+                    ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+                ])
+                ->get();
+
+            } else if ($datos['AllCategory']) { 
+
+                 $ventas_con_descuentos = DB::connection('retail')->table('ventasdet as v')
+                ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+                ->select(DB::raw('v.COD_PROD'),
+                DB::raw('v.PRECIO'),
+                DB::raw('v.PRECIO_UNIT'),
+                DB::raw('v.ITEM'))  
+                ->whereBetween('v.FECALTAS', [$inicio , $final])
+                ->whereIn('PRODUCTOS.MARCA', $datos['Marcas'])
+                ->where([
+                    ['v.ID_SUCURSAL', '=', $descuento->ID_SUCURSAL],
+                    ['v.CODIGO', '=', $descuento->CODIGO],
+                    ['v.CAJA', '=', $descuento->CAJA],
+                    ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+                ])
+                ->get();
+
+            } else if ($datos['AllBrand']) { 
+
+                 $ventas_con_descuentos = DB::connection('retail')->table('ventasdet as v')
+                ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+                ->select(DB::raw('v.COD_PROD'),
+                DB::raw('v.PRECIO'),
+                DB::raw('v.PRECIO_UNIT'),
+                DB::raw('v.ITEM'))  
+                ->whereBetween('v.FECALTAS', [$inicio , $final])
+                ->whereIn('PRODUCTOS.LINEA', $datos['Categorias'])
+                ->where([
+                    ['v.ID_SUCURSAL', '=', $descuento->ID_SUCURSAL],
+                    ['v.CODIGO', '=', $descuento->CODIGO],
+                    ['v.CAJA', '=', $descuento->CAJA],
+                    ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+                ])
+                ->get();
+
+            } else {
+
+                $ventas_con_descuentos = DB::connection('retail')->table('ventasdet as v')
+                ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+                ->select(DB::raw('v.COD_PROD'),
+                DB::raw('v.PRECIO'),
+                DB::raw('v.PRECIO_UNIT'),
+                DB::raw('v.ITEM'))  
+                ->whereBetween('v.FECALTAS', [$inicio , $final])
+                ->whereIn('PRODUCTOS.MARCA', $datos['Marcas'])
+                ->whereIn('PRODUCTOS.LINEA', $datos['Categorias'])
+                ->where([
+                    ['v.ID_SUCURSAL', '=', $descuento->ID_SUCURSAL],
+                    ['v.CODIGO', '=', $descuento->CODIGO],
+                    ['v.CAJA', '=', $descuento->CAJA],
+                    ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+                ])
+                ->get();
+
+            }
 
             /*  --------------------------------------------------------------------------------- */
 
@@ -407,6 +541,7 @@ class Venta extends Model
 
         /*  --------------------------------------------------------------------------------- */
         foreach ($ventasdet as $key => $value) {
+
 
             /*  --------------------------------------------------------------------------------- */
 
@@ -457,27 +592,26 @@ class Venta extends Model
             ->select(DB::raw('SUM(l.CANTIDAD) AS CANTIDAD'),
             DB::raw('PRODUCTOS.MARCA'),
             DB::raw('PRODUCTOS.LINEA'))
-            ->whereIn('PRODUCTOS.MARCA', $datos['Marcas'])
-            ->whereIn('PRODUCTOS.LINEA', $datos['Categorias'])
             ->where('l.ID_SUCURSAL', '=', $sucursal)
-            ->groupBy('l.COD_PROD')
+            ->groupBy('PRODUCTOS.MARCA', 'PRODUCTOS.LINEA')
             ->get();
 
         foreach ($stockGeneral as $key => $value) {
 
             /*  --------------------------------------------------------------------------------- */
 
-            // CARGAR STOCK GENERAL A MARCA
-
             if (array_key_exists($value->MARCA, $marcas))   {
+
+                // CARGAR STOCK GENERAL A MARCA
+
                 $marcas[$value->MARCA]["STOCK_G"] += $value->CANTIDAD;
+
             }
 
-             /*  --------------------------------------------------------------------------------- */
-
-            // CARGAR STOCK GENERAL CATEGORIA
-
             if (array_key_exists($value->MARCA.''.$value->LINEA, $categorias))   {
+
+                // CARGAR STOCK GENERAL CATEGORIA
+
                 $categorias[$value->MARCA.''.$value->LINEA]["STOCK_G"] += $value->CANTIDAD;
             }
 
@@ -494,6 +628,716 @@ class Venta extends Model
         // RETORNAR TODOS LOS ARRAYS
 
         return ['ventas' => $ventasdet, 'marcas' => (array)$marca[0], 'categorias' => (array)$categoria[0]];
+
+        /*  --------------------------------------------------------------------------------- */
+    }
+
+     public static function generarTablaMarca($datos) 
+    {
+
+        
+         /*  --------------------------------------------------------------------------------- */
+
+         // INCICIAR VARIABLES 
+
+        $inicio = date('Y-m-d', strtotime($datos['Inicio']));
+        $final = date('Y-m-d', strtotime($datos['Final']));
+        $mes = date('m', strtotime($datos['Inicio']));
+        $anio = date('Y', strtotime($datos['Inicio']));
+        $sucursal = $datos['Sucursal'];
+
+        $total = 0;
+        $totalVendido = 0;
+        $totalStock = 0;
+
+
+        // CARGAR MES PASADO
+
+        if ($mes === 1) {
+            $mes = 12;
+            $anio = $anio - 1;
+        } else {
+            $mes = $mes - 1;
+        }
+        
+        /*  --------------------------------------------------------------------------------- */
+
+        /*  *********** TODAS LAS VENTAS ENTRE LAS FECHAS INTERVALOS *********** */
+
+        
+
+            $ventasdet = DB::connection('retail')->table('ventasdet as v')
+            ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+            ->leftjoin('MARCA', 'MARCA.CODIGO', '=', 'PRODUCTOS.MARCA')
+            ->select(DB::raw('SUM(v.PRECIO) AS PRECIO'),
+            DB::raw('0 AS COMPORTAMIENTO_PRECIO'),
+            DB::raw('0 AS COMPORTAMIENTO_VENDIDO'), 
+            DB::raw('0 AS PRECIO_ANTERIOR'), 
+            DB::raw('0 AS VENDIDO_ANTERIOR'), 
+            DB::raw('0 AS P_TOTAL'),    
+            DB::raw('SUM(v.CANTIDAD) AS VENDIDO'),
+            DB::raw('0 AS P_VENDIDO'),
+            DB::raw('0 AS STOCK_G'),
+            DB::raw('0 AS P_STOCK'),
+            DB::raw('MARCA.DESCRIPCION AS MARCA_NOMBRE'),
+            DB::raw('PRODUCTOS.MARCA'))
+            ->whereBetween('v.FECALTAS', [$inicio , $final])
+            ->where([
+                ['v.ID_SUCURSAL', '=', $sucursal],
+                ['v.ANULADO', '<>', 1],
+                ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+            ])
+            ->groupBy('PRODUCTOS.MARCA')
+            ->get()
+            ->toArray(); 
+
+        /*  *********** MES ANTERIOR *********** */
+            
+            $ventasdetAnterior = DB::connection('retail')->table('ventasdet as v')
+            ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+            ->leftjoin('MARCA', 'MARCA.CODIGO', '=', 'PRODUCTOS.MARCA')
+            ->select(DB::raw('SUM(v.PRECIO) AS PRECIO'),
+            DB::raw('SUM(v.CANTIDAD) AS VENDIDO'),
+            DB::raw('PRODUCTOS.MARCA'))
+            ->whereMonth('v.FECALTAS', $mes)
+            ->whereYear('v.FECALTAS', $anio)
+            ->where([
+                ['v.ID_SUCURSAL', '=', $sucursal],
+                ['v.ANULADO', '<>', 1],
+                ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+            ])
+            ->groupBy('PRODUCTOS.MARCA')
+            ->get()
+            ->toArray(); 
+
+            
+        
+        /*  --------------------------------------------------------------------------------- */
+
+        /*  *********** TODOS LOS DESCUENTOS GENERALES  *********** */
+
+        $descuentos = DB::connection('retail')->table('ventasdet as v')
+        ->select(DB::raw('v.CODIGO'),
+        DB::raw('substring(v.DESCRIPCION, 11, 3) AS PORCENTAJE'),
+        DB::raw('v.CODIGO'),  
+        DB::raw('v.CAJA'),
+        DB::raw('v.ID_SUCURSAL'),
+        DB::raw('v.ITEM'))  
+        ->whereBetween('v.FECALTAS', [$inicio , $final])
+        ->where([
+            ['v.ID_SUCURSAL', '=', $sucursal],
+            ['v.ANULADO', '<>', 1],
+            ['v.DESCRIPCION', 'LIKE', 'DESCUENTO%'],
+            ['v.COD_PROD', '=', 2],
+        ])
+        ->get(); 
+
+       
+        /*  --------------------------------------------------------------------------------- */
+
+        foreach ($descuentos as $descuento) {
+
+            /*  --------------------------------------------------------------------------------- */
+
+            /*  *********** RECORRER LAS VENTAS CON LOS DESCUENTOS GENERALES *********** */
+
+            
+                $ventas_con_descuentos = DB::connection('retail')->table('ventasdet as v')
+                ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+                ->select(DB::raw('v.PRECIO'),
+                DB::raw('v.PRECIO_UNIT'),
+                DB::raw('v.ITEM'),
+                DB::raw('PRODUCTOS.MARCA'))
+                ->where([
+                    ['v.ID_SUCURSAL', '=', $descuento->ID_SUCURSAL],
+                    ['v.CODIGO', '=', $descuento->CODIGO],
+                    ['v.CAJA', '=', $descuento->CAJA],
+                    ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+                ])
+                ->get();
+
+            
+
+            /*  --------------------------------------------------------------------------------- */
+
+            /*  *********** EMPEZAR A MODIFICAR LOS VALORES DEL ARRAY *********** */
+
+            foreach ($ventas_con_descuentos as $ventas_con_descuento) {
+                if ($ventas_con_descuento->ITEM < $descuento->ITEM) {
+                    $key = array_search($ventas_con_descuento->MARCA, array_column($ventasdet, 'MARCA'));
+                    $ventasdet[$key]->PRECIO = (int)$ventasdet[$key]->PRECIO - (((int)$ventas_con_descuento->PRECIO * (int)$descuento->PORCENTAJE)/100);
+                }
+            }
+
+            /*  --------------------------------------------------------------------------------- */
+        }
+
+        
+        /*  --------------------------------------------------------------------------------- */
+
+        /*  *********** TODOS LOS DESCUENTOS GENERALES MES ANTERIOR *********** */
+
+        $descuentos = DB::connection('retail')->table('ventasdet as v')
+        ->select(DB::raw('v.CODIGO'),
+        DB::raw('substring(v.DESCRIPCION, 11, 3) AS PORCENTAJE'),
+        DB::raw('v.CODIGO'),  
+        DB::raw('v.CAJA'),
+        DB::raw('v.ID_SUCURSAL'),
+        DB::raw('v.ITEM'))  
+        ->whereMonth('v.FECALTAS', $mes)
+        ->whereYear('v.FECALTAS', $anio)
+        ->where([
+            ['v.ID_SUCURSAL', '=', $sucursal],
+            ['v.ANULADO', '<>', 1],
+            ['v.DESCRIPCION', 'LIKE', 'DESCUENTO%'],
+            ['v.COD_PROD', '=', 2],
+        ])
+        ->get(); 
+
+       
+        /*  --------------------------------------------------------------------------------- */
+
+        foreach ($descuentos as $descuento) {
+
+            /*  --------------------------------------------------------------------------------- */
+
+            /*  *********** RECORRER LAS VENTAS CON LOS DESCUENTOS GENERALES *********** */
+
+            
+                $ventas_con_descuentos = DB::connection('retail')->table('ventasdet as v')
+                ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+                ->select(DB::raw('v.PRECIO'),
+                DB::raw('v.PRECIO_UNIT'),
+                DB::raw('v.ITEM'),
+                DB::raw('PRODUCTOS.MARCA'))
+                ->where([
+                    ['v.ID_SUCURSAL', '=', $descuento->ID_SUCURSAL],
+                    ['v.CODIGO', '=', $descuento->CODIGO],
+                    ['v.CAJA', '=', $descuento->CAJA],
+                    ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+                ])
+                ->get();
+
+            
+
+            /*  --------------------------------------------------------------------------------- */
+
+            /*  *********** EMPEZAR A MODIFICAR LOS VALORES DEL ARRAY *********** */
+
+            foreach ($ventas_con_descuentos as $ventas_con_descuento) {
+                if ($ventas_con_descuento->ITEM < $descuento->ITEM) {
+                    $key = array_search($ventas_con_descuento->MARCA, array_column($ventasdetAnterior, 'MARCA'));
+                    $ventasdetAnterior[$key]->PRECIO = (int)$ventasdetAnterior[$key]->PRECIO - (((int)$ventas_con_descuento->PRECIO * (int)$descuento->PORCENTAJE)/100);
+                }
+            }
+
+            /*  --------------------------------------------------------------------------------- */
+        }
+
+        
+        /*  --------------------------------------------------------------------------------- */
+        // BUSCAR STOCK GENERAL DE TODAS CATEGORIAS
+
+        // $stockGeneral = DB::connection('retail')
+        //     ->table('LOTES as l')
+        //     ->leftjoin('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'l.COD_PROD')
+        //     ->select(DB::raw('SUM(l.CANTIDAD) AS CANTIDAD'),
+        //     DB::raw('PRODUCTOS.MARCA'))
+        //     ->where('l.ID_SUCURSAL', '=', $sucursal)
+        //     ->groupBy('PRODUCTOS.MARCA')
+        //     ->get();
+
+        //return $stockGeneral;    
+        foreach ($ventasdet as $key => $value) {
+
+            /*  --------------------------------------------------------------------------------- */
+
+            // $key2 = array_search($value->MARCA, array_column($ventasdet, 'MARCA'));
+            // if ($key2 <> "null") {
+
+            //     if (array_key_exists($key2, $ventasdet))   {
+            //         $ventasdet[$key2]->STOCK_G += $value->CANTIDAD;   
+            //     }
+            // }
+
+            $stockGeneral = DB::connection('retail')
+            ->table('LOTES as l')
+            ->leftjoin('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'l.COD_PROD')
+            ->select(DB::raw('SUM(l.CANTIDAD) AS CANTIDAD'),
+            DB::raw('PRODUCTOS.MARCA'))
+            ->where('PRODUCTOS.MARCA', '=', $value->MARCA)
+            ->where('l.ID_SUCURSAL', '=', $sucursal)
+            ->groupBy('PRODUCTOS.MARCA')
+            ->get();
+
+            $ventasdet[$key]->STOCK_G = $stockGeneral[0]->CANTIDAD;
+
+            /*  --------------------------------------------------------------------------------- */
+        }
+
+        /*  --------------------------------------------------------------------------------- */
+
+        // TOTALES
+
+        foreach ($ventasdet as $key => $value) {
+
+            /*  --------------------------------------------------------------------------------- */
+
+            // OBTENER LA UBICACION DE LA MARCA EN LAS VENTAS ANTERIORES 
+
+            $key2 = array_search($value->MARCA, array_column($ventasdetAnterior, 'MARCA'));
+            
+            /*  --------------------------------------------------------------------------------- */
+
+            // CARGAR PRECIOS ANTERIORES
+
+            if ($key2 <> null) {
+                $ventasdet[$key]->PRECIO_ANTERIOR = $ventasdetAnterior[$key2]->PRECIO;
+                $ventasdet[$key]->VENDIDO_ANTERIOR = $ventasdetAnterior[$key2]->VENDIDO;
+            } else if ($key2 === 0) {
+                $ventasdet[$key]->PRECIO_ANTERIOR = $ventasdetAnterior[$key2]->PRECIO;
+                $ventasdet[$key]->VENDIDO_ANTERIOR = $ventasdetAnterior[$key2]->VENDIDO; 
+            }
+
+            /*  --------------------------------------------------------------------------------- */
+
+            // CALCULAR COMPORTAMIENTOS 
+
+            if ($ventasdet[$key]->PRECIO_ANTERIOR <> 0) {
+                $ventasdet[$key]->COMPORTAMIENTO_PRECIO = number_format((($ventasdet[$key]->PRECIO / $ventasdet[$key]->PRECIO_ANTERIOR) - 1) * 100, 2);
+            } else {
+                $ventasdet[$key]->COMPORTAMIENTO_PRECIO = 100;
+            }
+            
+            if ($ventasdet[$key]->VENDIDO_ANTERIOR <> 0) {
+
+                $ventasdet[$key]->COMPORTAMIENTO_VENDIDO = number_format((($ventasdet[$key]->VENDIDO / $ventasdet[$key]->VENDIDO_ANTERIOR) - 1) * 100, 2);
+            } else {
+                $ventasdet[$key]->COMPORTAMIENTO_VENDIDO = 100;
+            }
+            
+            /*  --------------------------------------------------------------------------------- */
+
+            // CARGAR LOS TOTALES 
+
+            $total += $value->PRECIO;
+            $totalVendido += $value->VENDIDO;
+            $totalStock += $value->STOCK_G;
+
+            /*  --------------------------------------------------------------------------------- */
+        }
+
+        /*  --------------------------------------------------------------------------------- */
+
+        // CALCULAR LOS PORCENTAJES
+
+        foreach ($ventasdet as $key => $value) {
+            $ventasdet[$key]->P_TOTAL = round(($value->PRECIO * 100) / $total, 2);
+            $ventasdet[$key]->P_VENDIDO = round(($value->VENDIDO * 100) / $totalVendido, 2);
+            $ventasdet[$key]->P_STOCK = round(($value->STOCK_G * 100) / $totalStock, 2);
+        }
+
+        /*  --------------------------------------------------------------------------------- */
+
+        // RETORNAR TODOS LOS ARRAYS
+
+        return ['marcas' => $ventasdet];
+
+        /*  --------------------------------------------------------------------------------- */
+    }
+
+    public static function generarTablaCategoria($datos) 
+    {
+
+        
+         /*  --------------------------------------------------------------------------------- */
+
+         // INCICIAR VARIABLES 
+
+        $inicio = date('Y-m-d', strtotime($datos['Inicio']));
+        $final = date('Y-m-d', strtotime($datos['Final']));
+        $mes = date('m', strtotime($datos['Inicio']));
+        $anio = date('Y', strtotime($datos['Inicio']));
+        $sucursal = $datos['Sucursal'];
+
+        $total = 0;
+        $totalVendido = 0;
+        $totalStock = 0;
+
+
+        // CARGAR MES PASADO
+
+        if ($mes === 1) {
+            $mes = 12;
+            $anio = $anio - 1;
+        } else {
+            $mes = $mes - 1;
+        }
+        
+        /*  --------------------------------------------------------------------------------- */
+
+        /*  *********** TODAS LAS VENTAS ENTRE LAS FECHAS INTERVALOS *********** */
+
+        
+
+            $ventasdet = DB::connection('retail')->table('ventasdet as v')
+            ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+            ->leftjoin('LINEAS', 'LINEAS.CODIGO', '=', 'PRODUCTOS.LINEA')
+            ->select(DB::raw('SUM(v.PRECIO) AS PRECIO'),
+            DB::raw('0 AS COMPORTAMIENTO_PRECIO'),
+            DB::raw('0 AS COMPORTAMIENTO_VENDIDO'), 
+            DB::raw('0 AS PRECIO_ANTERIOR'), 
+            DB::raw('0 AS VENDIDO_ANTERIOR'), 
+            DB::raw('0 AS P_TOTAL'),    
+            DB::raw('SUM(v.CANTIDAD) AS VENDIDO'),
+            DB::raw('0 AS P_VENDIDO'),
+            DB::raw('0 AS STOCK_G'),
+            DB::raw('0 AS P_STOCK'),
+            DB::raw('LINEAS.DESCRIPCION AS LINEA_NOMBRE'),
+            DB::raw('PRODUCTOS.LINEA'))
+            ->whereBetween('v.FECALTAS', [$inicio , $final])
+            ->where([
+                ['v.ID_SUCURSAL', '=', $sucursal],
+                ['v.ANULADO', '<>', 1],
+                ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+            ])
+            ->groupBy('PRODUCTOS.LINEA')
+            ->get()
+            ->toArray(); 
+
+        /*  *********** MES ANTERIOR *********** */
+            
+            $ventasdetAnterior = DB::connection('retail')->table('ventasdet as v')
+            ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+            ->leftjoin('LINEAS', 'LINEAS.CODIGO', '=', 'PRODUCTOS.LINEA')
+            ->select(DB::raw('SUM(v.PRECIO) AS PRECIO'),
+            DB::raw('SUM(v.CANTIDAD) AS VENDIDO'),
+            DB::raw('LINEAS.DESCRIPCION AS LINEA_NOMBRE'),
+            DB::raw('PRODUCTOS.LINEA'))
+            ->whereMonth('v.FECALTAS', $mes)
+            ->whereYear('v.FECALTAS', $anio)
+            ->where([
+                ['v.ID_SUCURSAL', '=', $sucursal],
+                ['v.ANULADO', '<>', 1],
+                ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+            ])
+            ->groupBy('PRODUCTOS.LINEA')
+            ->get()
+            ->toArray(); 
+
+            
+        
+        /*  --------------------------------------------------------------------------------- */
+
+        /*  *********** TODOS LOS DESCUENTOS GENERALES  *********** */
+
+        $descuentos = DB::connection('retail')->table('ventasdet as v')
+        ->select(DB::raw('v.CODIGO'),
+        DB::raw('substring(v.DESCRIPCION, 11, 3) AS PORCENTAJE'),
+        DB::raw('v.CODIGO'),  
+        DB::raw('v.CAJA'),
+        DB::raw('v.ID_SUCURSAL'),
+        DB::raw('v.ITEM'))  
+        ->whereBetween('v.FECALTAS', [$inicio , $final])
+        ->where([
+            ['v.ID_SUCURSAL', '=', $sucursal],
+            ['v.ANULADO', '<>', 1],
+            ['v.DESCRIPCION', 'LIKE', 'DESCUENTO%'],
+            ['v.COD_PROD', '=', 2],
+        ])
+        ->get(); 
+
+       
+        /*  --------------------------------------------------------------------------------- */
+
+        foreach ($descuentos as $descuento) {
+
+            /*  --------------------------------------------------------------------------------- */
+
+            /*  *********** RECORRER LAS VENTAS CON LOS DESCUENTOS GENERALES *********** */
+
+            
+                $ventas_con_descuentos = DB::connection('retail')->table('ventasdet as v')
+                ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+                ->select(DB::raw('v.PRECIO'),
+                DB::raw('v.PRECIO_UNIT'),
+                DB::raw('v.ITEM'),
+                DB::raw('PRODUCTOS.LINEA'))
+                ->where([
+                    ['v.ID_SUCURSAL', '=', $descuento->ID_SUCURSAL],
+                    ['v.CODIGO', '=', $descuento->CODIGO],
+                    ['v.CAJA', '=', $descuento->CAJA],
+                    ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+                ])
+                ->get();
+
+            
+
+            /*  --------------------------------------------------------------------------------- */
+
+            /*  *********** EMPEZAR A MODIFICAR LOS VALORES DEL ARRAY *********** */
+
+            foreach ($ventas_con_descuentos as $ventas_con_descuento) {
+                if ($ventas_con_descuento->ITEM < $descuento->ITEM) {
+                    $key = array_search($ventas_con_descuento->LINEA, array_column($ventasdet, 'LINEA'));
+                    $ventasdet[$key]->PRECIO = (int)$ventasdet[$key]->PRECIO - (((int)$ventas_con_descuento->PRECIO * (int)$descuento->PORCENTAJE)/100);
+                }
+            }
+
+            /*  --------------------------------------------------------------------------------- */
+        }
+
+        
+        /*  --------------------------------------------------------------------------------- */
+
+        /*  *********** TODOS LOS DESCUENTOS GENERALES MES ANTERIOR *********** */
+
+        $descuentos = DB::connection('retail')->table('ventasdet as v')
+        ->select(DB::raw('v.CODIGO'),
+        DB::raw('substring(v.DESCRIPCION, 11, 3) AS PORCENTAJE'),
+        DB::raw('v.CODIGO'),  
+        DB::raw('v.CAJA'),
+        DB::raw('v.ID_SUCURSAL'),
+        DB::raw('v.ITEM'))  
+        ->whereMonth('v.FECALTAS', $mes)
+        ->whereYear('v.FECALTAS', $anio)
+        ->where([
+            ['v.ID_SUCURSAL', '=', $sucursal],
+            ['v.ANULADO', '<>', 1],
+            ['v.DESCRIPCION', 'LIKE', 'DESCUENTO%'],
+            ['v.COD_PROD', '=', 2],
+        ])
+        ->get(); 
+
+       
+        /*  --------------------------------------------------------------------------------- */
+
+        foreach ($descuentos as $descuento) {
+
+            /*  --------------------------------------------------------------------------------- */
+
+            /*  *********** RECORRER LAS VENTAS CON LOS DESCUENTOS GENERALES *********** */
+
+            
+                $ventas_con_descuentos = DB::connection('retail')->table('ventasdet as v')
+                ->join('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'v.COD_PROD')
+                ->select(DB::raw('v.PRECIO'),
+                DB::raw('v.PRECIO_UNIT'),
+                DB::raw('v.ITEM'),
+                DB::raw('PRODUCTOS.LINEA'))
+                ->where([
+                    ['v.ID_SUCURSAL', '=', $descuento->ID_SUCURSAL],
+                    ['v.CODIGO', '=', $descuento->CODIGO],
+                    ['v.CAJA', '=', $descuento->CAJA],
+                    ['v.DESCRIPCION', 'NOT LIKE', 'DESCUENTO%'],
+                ])
+                ->get();
+
+            
+
+            /*  --------------------------------------------------------------------------------- */
+
+            /*  *********** EMPEZAR A MODIFICAR LOS VALORES DEL ARRAY *********** */
+
+            foreach ($ventas_con_descuentos as $ventas_con_descuento) {
+                if ($ventas_con_descuento->ITEM < $descuento->ITEM) {
+                    $key = array_search($ventas_con_descuento->LINEA, array_column($ventasdetAnterior, 'LINEA'));
+                    $ventasdetAnterior[$key]->PRECIO = (int)$ventasdetAnterior[$key]->PRECIO - (((int)$ventas_con_descuento->PRECIO * (int)$descuento->PORCENTAJE)/100);
+                }
+            }
+
+            /*  --------------------------------------------------------------------------------- */
+        }
+
+        
+        /*  --------------------------------------------------------------------------------- */
+        // BUSCAR STOCK GENERAL DE TODAS CATEGORIAS
+
+        // $stockGeneral = DB::connection('retail')
+        //     ->table('LOTES as l')
+        //     ->leftjoin('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'l.COD_PROD')
+        //     ->select(DB::raw('SUM(l.CANTIDAD) AS CANTIDAD'),
+        //     DB::raw('PRODUCTOS.MARCA'))
+        //     ->where('l.ID_SUCURSAL', '=', $sucursal)
+        //     ->groupBy('PRODUCTOS.MARCA')
+        //     ->get();
+
+        //return $stockGeneral;    
+        foreach ($ventasdet as $key => $value) {
+
+            /*  --------------------------------------------------------------------------------- */
+
+            // $key2 = array_search($value->MARCA, array_column($ventasdet, 'MARCA'));
+            // if ($key2 <> "null") {
+
+            //     if (array_key_exists($key2, $ventasdet))   {
+            //         $ventasdet[$key2]->STOCK_G += $value->CANTIDAD;   
+            //     }
+            // }
+
+            $stockGeneral = DB::connection('retail')
+            ->table('LOTES as l')
+            ->leftjoin('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'l.COD_PROD')
+            ->select(DB::raw('SUM(l.CANTIDAD) AS CANTIDAD'),
+            DB::raw('PRODUCTOS.LINEA'))
+            ->where('PRODUCTOS.LINEA', '=', $value->LINEA)
+            ->where('l.ID_SUCURSAL', '=', $sucursal)
+            ->groupBy('PRODUCTOS.LINEA')
+            ->get();
+
+            $ventasdet[$key]->STOCK_G = $stockGeneral[0]->CANTIDAD;
+
+            /*  --------------------------------------------------------------------------------- */
+        }
+
+        /*  --------------------------------------------------------------------------------- */
+
+        // TOTALES
+
+        // foreach ($ventasdetAnterior as $key => $value) {
+
+        //     /*  --------------------------------------------------------------------------------- */
+
+        //     // OBTENER LA UBICACION DE LA MARCA EN LAS VENTAS ANTERIORES 
+
+        //     $key2 = array_search($value->LINEA, array_column($ventasdet, 'LINEA'));
+            
+        //     /*  --------------------------------------------------------------------------------- */
+
+        //     // CARGAR PRECIOS ANTERIORES
+
+        //     if ($key2 <> null) {
+        //         $ventasdet[$key2]->PRECIO_ANTERIOR = $ventasdetAnterior[$key]->PRECIO;
+        //         $ventasdet[$key2]->VENDIDO_ANTERIOR = $ventasdetAnterior[$key]->VENDIDO;
+        //     } else if ($key2 === 0) {
+        //         $ventasdet[$key2]->PRECIO_ANTERIOR = $ventasdetAnterior[$key]->PRECIO;
+        //         $ventasdet[$key2]->VENDIDO_ANTERIOR = $ventasdetAnterior[$key]->VENDIDO; 
+        //     } else {
+        //          $ventasdet->append($ventasdet->PRECIO = 0);
+        //         //                                             "COMPORTAMIENTO_PRECIO"=> 0, 
+        //         //                                             "COMPORTAMIENTO_VENDIDO"=> 0, 
+        //         //                                             "PRECIO_ANTERIOR"=> $ventasdetAnterior[$key]->PRECIO,
+        //         //                                             "VENDIDO_ANTERIOR"=> $ventasdetAnterior[$key]->VENDIDO,
+        //         //                                             "P_TOTAL"=> 0,
+        //         //                                             "VENDIDO"=> 0,
+        //         //                                             "P_VENDIDO"=> 0,
+        //         //                                             "STOCK_G"=> 0,
+        //         //                                             "P_STOCK"=> 0,
+        //         //                                             "LINEA_NOMBRE"=> $ventasdetAnterior[$key]->LINEA_NOMBRE,
+        //         //                                             "LINEA"=> $ventasdetAnterior[$key]->LINEA]);
+        //         // $ventasdet->append("PRECIO"=> 0,
+        //         //                                             "COMPORTAMIENTO_PRECIO"=> 0, 
+        //         //                                             "COMPORTAMIENTO_VENDIDO"=> 0, 
+        //         //                                             "PRECIO_ANTERIOR"=> $ventasdetAnterior[$key]->PRECIO,
+        //         //                                             "VENDIDO_ANTERIOR"=> $ventasdetAnterior[$key]->VENDIDO,
+        //         //                                             "P_TOTAL"=> 0,
+        //         //                                             "VENDIDO"=> 0,
+        //         //                                             "P_VENDIDO"=> 0,
+        //         //                                             "STOCK_G"=> 0,
+        //         //                                             "P_STOCK"=> 0,
+        //         //                                             "LINEA_NOMBRE"=> $ventasdetAnterior[$key]->LINEA_NOMBRE,
+        //         //                                             "LINEA"=> $ventasdetAnterior[$key]->LINEA);
+
+        //     }
+
+            
+        // }
+
+        // return $ventasdet;
+
+        // foreach ($ventasdet as $key => $value) {
+
+        //     /*  --------------------------------------------------------------------------------- */
+
+        //     // CALCULAR COMPORTAMIENTOS 
+
+        //     if ($ventasdet[$key]->PRECIO_ANTERIOR <> 0) {
+        //         $ventasdet[$key]->COMPORTAMIENTO_PRECIO = number_format((($ventasdet[$key]->PRECIO / $ventasdet[$key]->PRECIO_ANTERIOR) - 1) * 100, 2);
+        //     } else {
+        //         $ventasdet[$key]->COMPORTAMIENTO_PRECIO = 100;
+        //     }
+            
+        //     if ($ventasdet[$key]->VENDIDO_ANTERIOR <> 0) {
+
+        //         $ventasdet[$key]->COMPORTAMIENTO_VENDIDO = number_format((($ventasdet[$key]->VENDIDO / $ventasdet[$key]->VENDIDO_ANTERIOR) - 1) * 100, 2);
+        //     } else {
+        //         $ventasdet[$key]->COMPORTAMIENTO_VENDIDO = 100;
+        //     }
+            
+        //     /*  --------------------------------------------------------------------------------- */
+
+        //     // CARGAR LOS TOTALES 
+
+        //     $total += $value->PRECIO;
+        //     $totalVendido += $value->VENDIDO;
+        //     $totalStock += $value->STOCK_G;
+
+        //     /*  --------------------------------------------------------------------------------- */
+        // }
+
+        foreach ($ventasdet as $key => $value) {
+
+            /*  --------------------------------------------------------------------------------- */
+
+            // OBTENER LA UBICACION DE LA MARCA EN LAS VENTAS ANTERIORES 
+
+            $key2 = array_search($value->LINEA, array_column($ventasdetAnterior, 'LINEA'));
+            
+            /*  --------------------------------------------------------------------------------- */
+
+            // CARGAR PRECIOS ANTERIORES
+
+            if ($key2 <> null) {
+                $ventasdet[$key]->PRECIO_ANTERIOR = $ventasdetAnterior[$key2]->PRECIO;
+                $ventasdet[$key]->VENDIDO_ANTERIOR = $ventasdetAnterior[$key2]->VENDIDO;
+            } else if ($key2 === 0) {
+                $ventasdet[$key]->PRECIO_ANTERIOR = $ventasdetAnterior[$key2]->PRECIO;
+                $ventasdet[$key]->VENDIDO_ANTERIOR = $ventasdetAnterior[$key2]->VENDIDO; 
+            } 
+
+            /*  --------------------------------------------------------------------------------- */
+
+            // CALCULAR COMPORTAMIENTOS 
+
+            if ($ventasdet[$key]->PRECIO_ANTERIOR <> 0) {
+                $ventasdet[$key]->COMPORTAMIENTO_PRECIO = number_format((($ventasdet[$key]->PRECIO / $ventasdet[$key]->PRECIO_ANTERIOR) - 1) * 100, 2);
+            } else {
+                $ventasdet[$key]->COMPORTAMIENTO_PRECIO = 100;
+            }
+            
+            if ($ventasdet[$key]->VENDIDO_ANTERIOR <> 0) {
+
+                $ventasdet[$key]->COMPORTAMIENTO_VENDIDO = number_format((($ventasdet[$key]->VENDIDO / $ventasdet[$key]->VENDIDO_ANTERIOR) - 1) * 100, 2);
+            } else {
+                $ventasdet[$key]->COMPORTAMIENTO_VENDIDO = 100;
+            }
+            
+            /*  --------------------------------------------------------------------------------- */
+
+            // CARGAR LOS TOTALES 
+
+            $total += $value->PRECIO;
+            $totalVendido += $value->VENDIDO;
+            $totalStock += $value->STOCK_G;
+
+            /*  --------------------------------------------------------------------------------- */
+        }
+
+        /*  --------------------------------------------------------------------------------- */
+
+        // CALCULAR LOS PORCENTAJES
+
+        foreach ($ventasdet as $key => $value) {
+            $ventasdet[$key]->P_TOTAL = round(($value->PRECIO * 100) / $total, 2);
+            $ventasdet[$key]->P_VENDIDO = round(($value->VENDIDO * 100) / $totalVendido, 2);
+            $ventasdet[$key]->P_STOCK = round(($value->STOCK_G * 100) / $totalStock, 2);
+        }
+
+        /*  --------------------------------------------------------------------------------- */
+
+        // RETORNAR TODOS LOS ARRAYS
+
+        return ['categorias' => $ventasdet];
 
         /*  --------------------------------------------------------------------------------- */
     }

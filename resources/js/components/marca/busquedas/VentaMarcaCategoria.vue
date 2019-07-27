@@ -15,6 +15,7 @@
 						<div class="invalid-feedback">
 					        {{messageInvalidSucursal}}
 					    </div>
+
 					  	<label class="mt-3" for="validationTooltip01">Seleccione Intervalo de Tiempo</label>
 						<div id="sandbox-container">
 							<div class="input-daterange input-group">
@@ -92,7 +93,7 @@
 	    	</div>
 	     	
 	     	<div class="col-xl-6 col-lg-6 mt-3">
-	     		<table class="table table-striped table-light table-sm" v-if="responseMarca.length > 0">
+	     		<table class="table table-striped table-hover table-light table-sm" v-if="responseMarca.length > 0">
 				  <thead>
 				    <tr>
 				      <th scope="col">#</th>
@@ -104,7 +105,7 @@
 				    </tr>
 				  </thead>
 				  <tbody>
-				    <tr v-for="(marca, index) in responseMarca">
+				    <tr v-for="(marca, index) in responseMarca" v-on:click="clicked(marca)"  data-toggle="modal" data-target="#exampleModalCenter">
 				      <th scope="row">{{index+1}}</th>
 				      <td>{{marca.MARCA}}</td>
 				      <td>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(marca.VENDIDO)}}</td>
@@ -155,6 +156,50 @@
 					</li>
 				</ul>
 			</div> -->
+
+			<!-- MODAL DE TABLA PARA DATOS CRUDOS -->
+
+				<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+				  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="exampleModalCenterTitle">Marca: <small>{{marcaTitulo}}</small></h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				        <table class="table" v-if="datosFilas !== null">
+						  <thead>
+						    <tr>
+						      <th scope="col">#</th>
+						      <th scope="col">CODIGO</th>
+						      <th scope="col">DESCRIPCION</th>
+						      <th scope="col">STOCK</th>
+						      <th scope="col">VENDIDO</th>
+						      <th scope="col">PRECIO</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						    <tr v-for="(venta, index) in filterItems(responseVenta, datosFilas)">
+						      <th scope="row">{{index+1}}</th>
+						      <td>{{venta.COD_PROD}}</td>
+						      <td>{{venta.DESCRIPCION}}</td>
+						      <td>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(venta.STOCK)}}</td>
+						      <td>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(venta.VENDIDO)}}</td>
+						      <td>{{new Intl.NumberFormat("de-DE", {style: "decimal", decimal: "0"}).format(venta.PRECIO)}}</td>
+						    </tr>
+						  </tbody>
+						</table>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>	
+
+			<!-- FIN DE TALA DE DATOS CRUDOS -->
 
 			<div class="col-md-12">
 				<div class="card border-left-primary mt-3" v-for="marca in responseMarca">
@@ -227,6 +272,8 @@
               	selectedSucursal: '',
               	marcas: [],
               	selectedMarca: [],
+              	datosFilas: null,
+              	marcaTitulo: '',
               	categorias: [],
               	selectedCategoria: [],
               	onMarca: false,
@@ -245,6 +292,7 @@
               	datos: {},
               	responseMarca: {},
               	responseCategoria: [],
+              	responseVenta: [],
               	varTotalMarca: [],
 				varNombreMarca: [],
               	cargado: false
@@ -258,6 +306,10 @@
 	           	this.categorias = response.data.categorias;
 	          }); 
 	        },
+	        clicked(row) {
+	       	  this.marcaTitulo = row.MARCA; 	
+		      this.datosFilas = row.CODIGO;
+		    },
 	        filterItems: function(items, codigo) {
 			      return items.filter(function(item) {
 			      return item.MARCA === codigo;
@@ -275,6 +327,7 @@
 	        		me.cargado = true;
 					axios.post('/ventas', this.datos).then(function (response) {
 						me.cargado = false;
+						me.responseVenta = response.data.ventas;
 					    const marcaArray = Object.keys(response.data.marcas).map(i => response.data.marcas[i])
 					    me.responseMarca = marcaArray
 					    const categoriaArray = Object.keys(response.data.categorias).map(i => response.data.categorias[i])
@@ -350,7 +403,10 @@
 	        	Inicio: String(this.selectedInicialFecha),
 	        	Final: String(this.selectedFinalFecha),
 	        	Marcas: this.selectedMarca,
-	        	Categorias: this.selectedCategoria };
+	        	Categorias: this.selectedCategoria,
+	        	AllBrand: this.onMarca,
+	        	AllCategory: this.onCategoria 
+	        	};
 	        	
 	        	return true;
 	        },

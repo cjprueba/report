@@ -54,13 +54,13 @@
                         @else
                              <!-- Nav Item - Alerts -->
                             <li class="nav-item dropdown no-arrow mx-1">
-                              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" hidden>
                                 <font-awesome-icon icon="bell" />
                                 <!-- Counter - Alerts -->
                                 <span class="badge badge-danger badge-counter">3+</span>
                               </a>
                               <!-- Dropdown - Alerts -->
-                              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown" >
                                 <h6 class="dropdown-header">
                                   Alerts Center
                                 </h6>
@@ -103,8 +103,8 @@
                              <!-- END Nav Item - Alerts -->
 
                             <!-- Nav Item - Messages -->
-                            <li class="nav-item dropdown no-arrow mx-1">
-                              <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <li class="nav-item dropdown no-arrow mx-1" >
+                              <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" hidden>
                                 <font-awesome-icon icon="envelope" />
                                 <!-- Counter - Messages -->
                                 <span class="badge badge-danger badge-counter">7</span>
@@ -163,15 +163,15 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="#" disabled>
                                       <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                       Perfil
                                     </a>
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="#" disabled>
                                       <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                       Configuración
                                     </a>
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="#" disabled>
                                       <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                       Activity Log
                                     </a>
