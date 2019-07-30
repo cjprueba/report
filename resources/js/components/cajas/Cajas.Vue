@@ -109,7 +109,7 @@
                       </div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-comments fa-2x text-gray-300"></i>
+                       <font-awesome-icon icon="ban" class="fa-1x text-gray-300"/>
                     </div>
                   </div>
                 </div>
@@ -140,9 +140,10 @@
           axios.get('ventas/').then((response) => {
            this.caja1 = response.data;
            this.cargado = false;
-           
+          })
+          .catch(function (error) {
+            this.llamarVentas();
           });
-          
         },
         classObject: function (dato) {
           return {

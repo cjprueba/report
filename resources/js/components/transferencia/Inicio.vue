@@ -4,8 +4,6 @@
 			<label for="validationTooltip01">Seleccione Reporte Transferencia</label>
 			<select class="custom-select custom-select-sm" v-on:change="cambioReporte">
 				<option selected>Seleccionar</option>
-				<option value="1">Listar Transferencias</option>
-				<option value="2">Transferencias por Marca</option>
 				<option value="3">Transferencias por Marca y Categoria</option>
 			</select>			
 		</div>

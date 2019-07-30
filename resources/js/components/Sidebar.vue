@@ -15,7 +15,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="#" v-on:click="llamar(1)">
+        <a class="nav-link" href="/home" >
           <font-awesome-icon icon="tv" />
           <span>Panel</span></a>
       </li>

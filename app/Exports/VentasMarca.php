@@ -30,9 +30,8 @@ class VentasMarca implements WithMultipleSheets
     /**
     * @return \Illuminate\Support\Collection
     */
- public function __construct(Request $request)
+ public function __construct($datos)
     {
-        $datos = $request->all();
         $this->inicio = date('Y-m-d', strtotime($datos['Inicio']));
         $this->final  =  date('Y-m-d', strtotime($datos['Final']));
         $this->sucursal = $datos['Sucursal'];
@@ -61,14 +60,14 @@ class VentasMarca implements WithMultipleSheets
          })
          ->WHERE([ 
          ['VENTASDET.DESCRIPCION', 'not like', 'DESCUENTO%'],
-         ['VENTASDET.ID_SUCURSAL','=',$sucursal],
+         ['VENTASDET.ID_SUCURSAL','=',$this->sucursal],
          ['VENTASDET.ANULADO','<>',1 ]])
-         ->whereBetween('VENTASDET.FECALTAS', [$inicio, $final])
+         ->whereBetween('VENTASDET.FECALTAS', [$this->inicio, $this->final])
          ->GROUPBY('VENTASDET.COD_PROD')
-        ->GROUPBY('PRODUCTOS_AUX.PRECOSTO')
-        ->GROUPBY('VENTASDET.PRECIO_UNIT')
+         ->GROUPBY('VENTASDET.PRECIO_UNIT')
          ->get()
          ->toArray();
+
 
            $this->descuentogeneral= DB::connection('retail')->table('VENTASDET')->SELECT(DB::raw('VENTASDET.CODIGO'),
             DB::raw('SUBSTRING(VENTASDET.DESCRIPCION,11,3) AS PORCENTAJE'),
@@ -76,11 +75,11 @@ class VentasMarca implements WithMultipleSheets
             DB::raw('VENTASDET.ID_SUCURSAL'),
             DB::raw('VENTASDET.ITEM')
          )
-             ->where([['VENTASDET.ID_SUCURSAL','=',$sucursal],
+             ->where([['VENTASDET.ID_SUCURSAL','=',$this->sucursal],
             ['VENTASDET.DESCRIPCION', 'like', 'DESCUENTO%'],
                ['VENTASDET.cod_prod', '=','2'],
              ['VENTASDET.ANULADO','<>',1]])
-               ->whereBetween('VENTASDET.FECALTAS', [$inicio, $final])
+               ->whereBetween('VENTASDET.FECALTAS', [$this->inicio, $this->final])
                ->get();
                foreach ($this->descuentogeneral as $this->descuento ) {
                     $this->calculo=DB::connection('retail')->table('VENTASDET')->SELECT(DB::raw('VENTASDET.COD_PROD'),
@@ -89,7 +88,7 @@ class VentasMarca implements WithMultipleSheets
             DB::raw('VENTASDET.ITEM')
              )
              ->where([
-            ['VENTASDET.ID_SUCURSAL','=',$sucursal],
+            ['VENTASDET.ID_SUCURSAL','=',$this->sucursal],
             ['VENTASDET.CODIGO', '=', $this->descuento->CODIGO],
             ['VENTASDET.DESCRIPCION', 'not like', 'DESCUENTO%'],
             ['VENTASDET.CAJA', '=',$this->descuento->CAJA],
@@ -122,12 +121,14 @@ class VentasMarca implements WithMultipleSheets
          ->leftJoin('PRODUCTOS', 'PRODUCTOS.CODIGO', '=', 'VENTASDET.COD_PROD')
           ->leftJoin('MARCA', 'MARCA.CODIGO', '=', 'PRODUCTOS.MARCA')
            ->leftJoin('LINEAS', 'LINEAS.CODIGO', '=', 'PRODUCTOS.LINEA')
-         ->WHERE('VENTASDET.ID_SUCURSAL','=',$sucursal)
+         ->WHERE('VENTASDET.ID_SUCURSAL','=',$this->sucursal)
          ->where('VENTASDET.DESCRIPCION', 'not like', 'DESCUENTO%')
-        ->whereBetween('VENTASDET.FECALTAS', [$inicio, $final])
+        ->whereBetween('VENTASDET.FECALTAS', [$this->inicio, $this->final])
         ->GROUPBY ('PRODUCTOS.MARCA')
         ->GROUPBY ('PRODUCTOS.LINEA')
          ->get();
+
+
          foreach ($RESULTS as $KEY  => $value) {
           if($value->DescriM==NULL){
             $descrim='Indefinido';
@@ -140,12 +141,12 @@ class VentasMarca implements WithMultipleSheets
             $descrili=$value->DESCRIPCION;
           }
           $this->sheets[]= new VentaMarcaPorMes($value->Marca,$descrim,$value->Linea,$descrili,$this->hojas,$this->ventageneral);
-           # code...
+           
          }
        
 
          
-        
+        //return var_dump($this->sheets);
      return $this->sheets;
 
       } 

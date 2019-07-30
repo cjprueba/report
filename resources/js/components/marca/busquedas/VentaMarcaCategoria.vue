@@ -71,7 +71,16 @@
 
 		<div class="row">
 
-			<!-- SPINNER -->
+			<!-- SPINNER DESCARGA -->
+
+			<div class="col-md-12">
+				<div v-if="descarga" class="d-flex justify-content-center mt-3">
+					<strong>Descargando...   </strong>
+	                <div class="spinner-border text-success" role="status" aria-hidden="true"></div>
+	             </div>
+            </div>
+
+			<!-- SPINNER CONSULTA -->
 
 			<div class="col-md-12">
 				<div v-if="cargado" class="d-flex justify-content-center mt-3">
@@ -295,7 +304,8 @@
               	responseVenta: [],
               	varTotalMarca: [],
 				varNombreMarca: [],
-              	cargado: false
+              	cargado: false,
+              	descarga: false
             }
         }, 
         methods: {
@@ -309,16 +319,18 @@
 	        descargar(){
 	        	let me = this;	
 	        	if(this.generarConsulta() === true) {
+	        		me.descarga = true;
 		        	axios({
-					  url: '/downloadVentaMarca',
+					  url: '/export',
 					  method: 'POST',
 					  data: me.datos,
 					  responseType: 'blob', // important
 					}).then((response) => {
+						me.descarga = false;
 					   const url = window.URL.createObjectURL(new Blob([response.data]));
 					   const link = document.createElement('a');
 					   link.href = url;
-					   link.setAttribute('download', 'Venta-'+selectedInicialFecha+'-'+selectedFinalFecha+'.xlsx'); //or any other extension
+					   link.setAttribute('download', 'Venta-'+me.selectedInicialFecha+'-'+me.selectedFinalFecha+'.xlsx'); //or any other extension
 					   document.body.appendChild(link);
 					   link.click();
 					});

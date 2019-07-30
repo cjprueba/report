@@ -4,8 +4,6 @@
 			<label for="validationTooltip01">Seleccione Reporte Ventas</label>
 			<select class="custom-select custom-select-sm" v-on:change="cambioReporte">
 				<option selected>Seleccionar</option>
-				<option value="1">Listar Marcas</option>
-				<option value="2">Ventas por Marca</option>
 				<option value="3">Ventas por Marca y Categoria</option>
 			</select>			
 		</div>
